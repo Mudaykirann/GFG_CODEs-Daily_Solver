@@ -24,6 +24,7 @@ class Main {
                 System.out.print(i + " ");
             }
             System.out.println(); // Print a new line after the result
+            System.out.println("~");
         }
     }
 }
@@ -35,26 +36,23 @@ class Main {
 class Solution {
     static ArrayList<Integer> subarraySum(int[] arr, int target) {
         // code here
-         int startIndex = 1;
-        int endIndex = 1;
-        int accumulatedSum = 0;
-        for(int i = 0; i < arr.length; i++) {
-            accumulatedSum += arr[i];
-            if(accumulatedSum == target) {
-                ArrayList<Integer> result = new ArrayList<>();
-                result.add(startIndex);
-                result.add(endIndex);
+        int start = 0;
+        int currentSum = 0;
+         ArrayList<Integer> result = new ArrayList<>();
+        for (int end = 0; end < arr.length; end++) {
+            currentSum += arr[end];
+            while (currentSum > target && start <= end) {
+                currentSum -= arr[start];
+                start++;
+            }
+
+            if (currentSum == target) {
+                result.add(start+1);
+                result.add(end+1);
                 return result;
             }
-            if(accumulatedSum < target) {
-                endIndex++;
-                continue;
-            }
-            i = startIndex - 1;
-            startIndex = startIndex + 1;
-            endIndex = startIndex;
-            accumulatedSum = 0;
         }
-        return new ArrayList<>(List.of(-1));
+        result.add(-1);
+        return result;
     }
 }
